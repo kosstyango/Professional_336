@@ -1,38 +1,35 @@
-import java.util.ArrayList;
-import java.util.InputMismatchException;
+import java.util.Random;
 import java.util.Scanner;
 
 public class HomeWorkBarnaev {
-    //Программа расчета суммы трех чисел
+    //Программа угадай число
 
     public static void main(String[] args) {
-        ArrayList<Integer> list = new ArrayList();
-        for (int i = 0; i < 3; i++) {
-            System.out.println("Введите число " + (i + 1));
-            list.add(getInt());
-        }
-        System.out.println("Сумма чисел = " + summ(list));
-    }
 
-    public static int summ(ArrayList list) {
-        int sum = 0;
-        for (int i = 0; i < list.size(); i++)
-            sum += (int) list.get(i);
-        return sum;
-    }
+        int compNumber = random();
 
-    public static int getInt() {
-        Scanner s = new Scanner(System.in);
-        boolean b = false;
-        int a = 0;
-        while (b == false) {
-            try {
-                a = s.nextInt();
-                b = true;
-            } catch (InputMismatchException e) {
-                System.out.println(s.nextLine() + " это не число, попробуйте ещё");
+        boolean f = true;
+        while (f == true) {
+            if (scan() == compNumber) {
+                System.out.println("Вы выиграли");
+                System.out.println("ПОЗДРАВЛЯЮ!!!");
+                f = false;
+            } else {
+                System.out.println("Это неправильный ответ :(");
+                System.out.println("Вы проиграли");
             }
         }
-        return a;
     }
-}
+        public static int random() {
+            Random newRandom = new Random();
+            int randoNumber = newRandom.nextInt(11) + 1;
+            return randoNumber;
+        }
+
+        public static int scan(){
+            System.out.println("Введите число от 1 до 10");
+            Scanner scanner = new Scanner(System.in);
+            int humanNumber = Integer.parseInt(scanner.nextLine());
+            return humanNumber;
+        }
+    }
