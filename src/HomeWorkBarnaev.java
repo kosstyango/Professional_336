@@ -1,26 +1,35 @@
-import java.util.Scanner;
-
 public class HomeWorkBarnaev {
-//    Для расчета количества дней в году требуется знать несколько правил:
-//    В високосном году 366 дней, в обычном 365.
-//    Високосный год — это год, номер которого делится без остатка на 400 (например 2000 или 2400),
-//          либо делится на 4 но не делится на 100 (например 2008, 2096, но не 2100).
-public static void main(String[] args) {
-        Scanner s = new Scanner(System.in);
-        int year;
-        while (true) {
-            System.out.print("Введите год: ");
-            if (s.hasNextInt())
-            {   year = s.nextInt();
-                break;}
-            else System.out.println(s.nextLine() + " это не число");
-        }
-    System.out.println(year+" "+isLeapYear(year));
+    //    Создать класс Person, который содержит:
+    //    переменные fullName, age;
+    //    методы move() и talk(), в которых просто вывести на консоль сообщение -"Такой-то  Person говорит".
+    //    Добавьте два конструктора  - Person() и Person(fullName, age).
+    //    Создайте два объекта этого класса. Один объект инициализируется конструктором Person(), другой - Person(fullName, age)
+    public static void main(String[] args) {
+        Person person1 = new Person(); //дефолтный человек
+        person1.move();
+        person1.talk();
+        Person person2 = new Person("Константин Сергеевич", 45);
+        person2.move();
+        person2.talk();
     }
 
-    public static String isLeapYear(int year) {
-        if (year%400 == 0) return "високосный, в нём 366 дней";
-        else if (year%4 == 0 && year%100 != 0) return "високосный, в нём 366 дней";
-        else return "не високосный, в нём 365 дней";
+    public static class Person {
+        String fullNAme;
+        int age;
+
+        public Person() { //дефолтный конструктор
+        }
+
+        public Person(String fullName, int age) { //конструктор с двумя полями
+            this.age = age;
+            this.fullNAme = fullName;
+        }
+
+        void move() {
+            System.out.println("Человек " + this.fullNAme + " идёт");
+        }
+        void talk() {
+            System.out.println("Человек " + this.fullNAme + " говорит");
+        }
     }
 }
