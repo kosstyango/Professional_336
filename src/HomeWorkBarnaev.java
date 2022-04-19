@@ -26,10 +26,10 @@ public class HomeWorkBarnaev {
         }
 
         void move() {
-            System.out.println("Человек " + this.fullNAme + " идёт");
+            System.out.println(this.fullNAme + " person идёт");
         }
         void talk() {
-            System.out.println("Человек " + this.fullNAme + " говорит");
+            System.out.println(this.fullNAme + " person говорит");
         }
     }
 }
