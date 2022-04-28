@@ -1,117 +1,51 @@
+import java.io.*;
+import java.util.Scanner;
+
 public class HomeWorkBarnaev {
-    //    Создайте иерархию "Пользователи библиотеки" со следующими интерфейсами:
-//    Читатель – берет и возвращает книги.
-//    Библиотекарь – заказывает книги.
-//    Поставщик книг – приносит книги в библиотеку.
-//    Администратор – находит и выдает книги и уведомляет о просрочках времени возврата.
-//    В методе public static void main создайте 2-3 объекта, реализующих эти интерфейсы.
-    public static void main(String[] args) {
+    //    создать два текстовых документа с помощью IDEA. Наполнить их произвольным текстом.
+    //    Из первого текстового файла во второй надо переписать все строки, вставив в конец каждой строки ее длину.
+    public static void main(String[] args) throws IOException {
+        try {
+            String str = "Это проверочная запись в файл С:/text1.txt";
+            File file1 = new File("c:/text1.txt"); //Создаём первый файл
+            FileWriter fr = new FileWriter(file1);   // Открываем поток записи файла
+            BufferedWriter br = new BufferedWriter(fr);  //Буферизируем поток записи
+            for (int i = 0; i < 100; i++) {
+                br.write(Integer.toString(i + 1)+ " " + str + (char)10); //пишем в файл строку с её порядковым номером
+            }
+            fr.flush(); //прочищаем поток
+            br.flush(); //прочищаем поток
+            System.out.println("Запись файла завершена успешно");
+            fr.close(); //закрываем поток
+            br.close(); //закрываем поток
+        } catch (Exception e) {System.out.println("Записать первый файл не удалось");}
 
-        Librerian Petrova = new Librerian("Петрова");
-        Petrova.orderBooks("Война и мир", "Лев Николаевич Толстой");
+        try {
+            String str2;
+            File file2 = new File("c:/text2.txt"); //создаём второй файл
+            FileWriter fr2 = new FileWriter(file2);   //Создаём поток записи 2-го файла
+            BufferedWriter br2 = new BufferedWriter(fr2);  //Создаём буферизированный поток записи 2-го файла
+            FileReader fr1 = new FileReader("c:/text1.txt");   //Создаём поток чтения из 1-го файла
+            BufferedReader br1 = new BufferedReader(fr1);  //Буферизируем поток чтения из 1-го файла
 
-        Reader Raskolnikov = new Reader("Раскольников");
-        Raskolnikov.returnBooks("Как свергнуть правительство");
-
-        Reader Smirnova = new Reader("Смирнова");
-        Smirnova.takeBooks("Как учиться на пятёрки");
-
-        Supplier Sidorov = new Supplier("Сидоров");
-        Sidorov.bringBooks("Как учиться на пятёрки", 2.5);
-
-        Admin Ivanova = new Admin("Иванова");
-        Ivanova.giveawayBooks("Как учиться на пятёрки", 1999);
-        Ivanova.delayInform("Раскольников", "Как свергнуть правительство", 14);
-        Ivanova.findBooks("Домоводство", 1772);
-    }
-
-    public interface TakeBooksAble { //интерфейс "может взять книги"
-        void takeBooks(String bookName);
-    }
-
-    public interface ReturnBooksAble { //интерфейс "может возвращать книги"
-        void returnBooks(String bookName);
-    }
-
-    public interface OrderBooksAble { //интерфейс "может заказывать книги"
-        void orderBooks(String bookName, String authorName);
-    }
-
-    public interface BringBooksAble { //интерфейс "может приносить книги"
-        void bringBooks(String bookName, Double bookWeight);
-    }
-
-    public interface FindBooksAble { //интерфейс "может находить книги"
-        void findBooks(String bookName, int issueYear);
-    }
-
-    public interface GiveawayBooksAble { //интерфейс "может выдавать книги"
-        void giveawayBooks(String bookName, int issueYear);
-    }
-
-    public interface DelayInformAble { //интерфейс "может информировать о просрочке"
-        void delayInform(String readerName, String bookName, int daysDelay);
-    }
-    public static class Librerian implements OrderBooksAble {
-        String surname;
-
-        public Librerian(String surname) {
-            this.surname = surname;
-        }
-        @Override
-        public void orderBooks(String bookName, String authorName) {
-            System.out.println("Библиотекарь " + surname + ": Заказываю книгу \"" + bookName + "\", которую написал " + authorName + ".");
-        }
-    }
-
-    public static class Supplier implements BringBooksAble {
-        String surname;
-
-        public Supplier(String surname) {
-            this.surname = surname;
-        }
-        @Override
-        public void bringBooks(String bookName, Double bookWeight) {
-            System.out.println("Поставщик " + surname + ": принёс вам книгу \"" + bookName + "\", которую весит " + bookWeight + "кг.");
-        }
-    }
-
-    public static class Reader implements TakeBooksAble, ReturnBooksAble {
-        String surname;
-
-        public Reader(String surname) {
-            this.surname = surname;
-        }
-        @Override
-        public void takeBooks(String bookName) {
-            System.out.println("Читатель " + surname + ": беру книгу \"" + bookName + "\".");
-        }
-
-        @Override
-        public void returnBooks(String bookName) {
-            System.out.println("Читатель " + surname + ": сдаю книгу \"" + bookName + "\".");
-        }
-    }
-
-    public static class Admin implements FindBooksAble, GiveawayBooksAble, DelayInformAble {
-        String surname;
-
-        public Admin(String surname) {
-            this.surname = surname;
-        }
-        @Override
-        public void findBooks(String bookName, int issueYear) {
-            System.out.println("Администратор " + surname + ": нашёл книгу \"" + bookName + "\" " + issueYear + "года.");
-        }
-
-        @Override
-        public void giveawayBooks(String bookName, int issueYear) {
-            System.out.println("Администратор " + surname + ": выдаю книгу \"" + bookName + "\" " + issueYear + "года.");
-        }
-
-        @Override
-        public void delayInform(String readerName, String bookName, int daysDelay) {
-            System.out.println("Администратор " + surname + ": информирую читателя " + readerName + ": книга \"" + bookName + "\" " + "просрочена на " + daysDelay + "дней.");
+            while (br1.ready()) {
+                str2 = br1.readLine(); //считываем строку из 1-го файла
+                //System.out.println("Считана строка: " + str2);
+                int strLength = str2.length(); //вычисляем длину считанной строки
+                //System.out.println("В этой строке "+strLength+" символов.");
+                str2 += Integer.toString(strLength); //добавляем в конец строки её длину
+                //System.out.println("Записываем во 2 файл строку "+str2);
+                br2.write(str2+ (char)10); //записываем строку с длинной во 2-й файл
+            }
+            System.out.println("Перезапись файла завершена успешно");
+            fr2.flush(); //очищаем поток
+            br2.flush(); //очищаем поток
+            fr1.close(); //закрываем поток
+            br1.close(); //закрываем поток
+            fr2.close(); //закрываем поток
+            br2.close(); //закрываем поток
+        } catch (IOException e) {
+            System.out.println("Ошибка перезаписи");
         }
     }
 }
