@@ -1,57 +1,117 @@
-import java.util.ArrayList;
-
 public class HomeWorkBarnaev {
-    //    Создайте пример наследования, реализуйте класс Student и класс Aspirant,
-    //    аспирант отличается от студента наличием некой научной работы.
-    //    Класс Student содержит переменные: String firstName, lastName, group.
-    //    А также, double averageMark, содержащую среднюю оценку.
-    //    Создайте переменную типа Student, которая ссылается на объект типа Aspirant.
-    //    Создайте метод getScholarship() для класса Student, который возвращает сумму стипендии.
-    //    Если средняя оценка студента равна 5 баллам, то сумма 100 р, иначе 80 р. Переопределить этот метод в классе Aspirant.
-    //    Если средняя оценка аспиранта равна 5 баллам, то сумма 200 р, иначе 180 р.
-    //    Создайте массив типа Student, содержащий объекты класса Student и Aspirant.
-    //    Вызовите метод getScholarship() для каждого элемента массива.
+    //    Создайте иерархию "Пользователи библиотеки" со следующими интерфейсами:
+//    Читатель – берет и возвращает книги.
+//    Библиотекарь – заказывает книги.
+//    Поставщик книг – приносит книги в библиотеку.
+//    Администратор – находит и выдает книги и уведомляет о просрочках времени возврата.
+//    В методе public static void main создайте 2-3 объекта, реализующих эти интерфейсы.
     public static void main(String[] args) {
-        ArrayList<Student> list = new ArrayList(); //создаём массив Студентов и Аспирантов
-        list.add(new Student("Иван","Иванов", 134, 4.5));
-        list.add(new Student("Пётр","Петров", 254, 4.2));
-        list.add(new Student("Сидр","Сидоров", 185, 5.0));
-        list.add(new Aspirant("Семён Семёныч","Разнополов", 0, 4.5, "Научная работа"));
-        list.add(new Aspirant("Кузьма Николаевич","Кузьмин", 0, 5.0, "Научная работа2"));
-        list.add(new Aspirant("Валерия Николаевна","Свистунова", 0, 5.0, "Научная работа3"));
-        list.add(new Student("Екатерина","Синицина", 184, 4.0));
 
-        for(int i=0; i<list.size(); i++) //Выводим инфо о стипендии всех Студентов и Аспирантов
-            System.out.println(list.get(i).lastName+" получает ежемесячно: "+list.get(i).getScholarship());
+        Librerian Petrova = new Librerian("Петрова");
+        Petrova.orderBooks("Война и мир", "Лев Николаевич Толстой");
+
+        Reader Raskolnikov = new Reader("Раскольников");
+        Raskolnikov.returnBooks("Как свергнуть правительство");
+
+        Reader Smirnova = new Reader("Смирнова");
+        Smirnova.takeBooks("Как учиться на пятёрки");
+
+        Supplier Sidorov = new Supplier("Сидоров");
+        Sidorov.bringBooks("Как учиться на пятёрки", 2.5);
+
+        Admin Ivanova = new Admin("Иванова");
+        Ivanova.giveawayBooks("Как учиться на пятёрки", 1999);
+        Ivanova.delayInform("Раскольников", "Как свергнуть правительство", 14);
+        Ivanova.findBooks("Домоводство", 1772);
     }
-    public static class Student{
-        String firstName;
-        String lastName;
-        int groupNumber;
-        Double averageMark;
 
-        public int getScholarship(){
-            if (this.averageMark == 5) return 100;
-            else return 80;
+    public interface TakeBooksAble { //интерфейс "может взять книги"
+        void takeBooks(String bookName);
+    }
+
+    public interface ReturnBooksAble { //интерфейс "может возвращать книги"
+        void returnBooks(String bookName);
+    }
+
+    public interface OrderBooksAble { //интерфейс "может заказывать книги"
+        void orderBooks(String bookName, String authorName);
+    }
+
+    public interface BringBooksAble { //интерфейс "может приносить книги"
+        void bringBooks(String bookName, Double bookWeight);
+    }
+
+    public interface FindBooksAble { //интерфейс "может находить книги"
+        void findBooks(String bookName, int issueYear);
+    }
+
+    public interface GiveawayBooksAble { //интерфейс "может выдавать книги"
+        void giveawayBooks(String bookName, int issueYear);
+    }
+
+    public interface DelayInformAble { //интерфейс "может информировать о просрочке"
+        void delayInform(String readerName, String bookName, int daysDelay);
+    }
+    public static class Librerian implements OrderBooksAble {
+        String surname;
+
+        public Librerian(String surname) {
+            this.surname = surname;
         }
-        public Student (String firstName, String lastName, int groupNumber, Double averageMark) {
-            this.firstName=firstName;
-            this.lastName=lastName;
-            this.groupNumber=groupNumber;
-            this.averageMark=averageMark;
+        @Override
+        public void orderBooks(String bookName, String authorName) {
+            System.out.println("Библиотекарь " + surname + ": Заказываю книгу \"" + bookName + "\", которую написал " + authorName + ".");
         }
     }
-    public static class Aspirant extends Student{
-        String scienceWork;
 
-        public Aspirant(String firstName, String lastName, int groupNumber, Double averageMark, String scienceWork) {
-            super(firstName, lastName, groupNumber, averageMark);
+    public static class Supplier implements BringBooksAble {
+        String surname;
+
+        public Supplier(String surname) {
+            this.surname = surname;
+        }
+        @Override
+        public void bringBooks(String bookName, Double bookWeight) {
+            System.out.println("Поставщик " + surname + ": принёс вам книгу \"" + bookName + "\", которую весит " + bookWeight + "кг.");
+        }
+    }
+
+    public static class Reader implements TakeBooksAble, ReturnBooksAble {
+        String surname;
+
+        public Reader(String surname) {
+            this.surname = surname;
+        }
+        @Override
+        public void takeBooks(String bookName) {
+            System.out.println("Читатель " + surname + ": беру книгу \"" + bookName + "\".");
         }
 
         @Override
-        public int getScholarship(){
-            if (this.averageMark == 5) return 200;
-            else return 180;
+        public void returnBooks(String bookName) {
+            System.out.println("Читатель " + surname + ": сдаю книгу \"" + bookName + "\".");
+        }
+    }
+
+    public static class Admin implements FindBooksAble, GiveawayBooksAble, DelayInformAble {
+        String surname;
+
+        public Admin(String surname) {
+            this.surname = surname;
+        }
+        @Override
+        public void findBooks(String bookName, int issueYear) {
+            System.out.println("Администратор " + surname + ": нашёл книгу \"" + bookName + "\" " + issueYear + "года.");
+        }
+
+        @Override
+        public void giveawayBooks(String bookName, int issueYear) {
+            System.out.println("Администратор " + surname + ": выдаю книгу \"" + bookName + "\" " + issueYear + "года.");
+        }
+
+        @Override
+        public void delayInform(String readerName, String bookName, int daysDelay) {
+            System.out.println("Администратор " + surname + ": информирую читателя " + readerName + ": книга \"" + bookName + "\" " + "просрочена на " + daysDelay + "дней.");
         }
     }
 }
